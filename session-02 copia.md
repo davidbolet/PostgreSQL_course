@@ -1,4 +1,4 @@
-# Session 3: Schema Design for Microservices
+# Session 2: Schema Design for Microservices
 
 ## Duration: 5 hours
 

@@ -31,8 +31,8 @@ The course is structured into 8 sessions: 3 sessions of 5 hours for foundational
 | Session | Title                                           | Duration |
 |---------|--------------------------------------------------|----------|
 | 01      | [Foundations of PostgreSQL](session-01.md)      | 5h       |
-| 02      | [Schema Design for Microservices](session-02.md)| 5h       |
-| 03      | [Normalized Database Design](session-03.md)     | 5h       |
+| 02      | [Normalized Database Design](session-02.md)     | 5h       |
+| 03      | [Schema Design for Microservices](session-03.md)| 5h       |
 | 04      | [Query Analysis for Defect Resolution](session-04.md) | 3h  |
 | 05      | [Working with Transactions](session-05.md)      | 3h       |
 | 06      | [Redis and Spring Boot](session-06.md)          | 3h       |

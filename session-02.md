@@ -1,4 +1,4 @@
-# Session 2: Schema Design for Microservices
+# Session 2: Normalized Database Design
 
 ## Duration: 5 hours
 
@@ -6,163 +6,181 @@
 
 ## 🧠 Objectives
 
-- Understand how to design clean and scalable database schemas.
-- Evaluate normalization and denormalization trade-offs.
-- Apply foreign key strategies for distributed microservices.
-- Learn schema ownership models and design boundaries.
-- Identify anti-patterns and best practices in schema design.
-- Practice modeling a service schema from scratch.
+- Understand the goals of database normalization.
+- Learn how to apply 1NF, 2NF, 3NF, and BCNF.
+- Explore the benefits and trade-offs of normalization.
+- Practice designing normalized schemas.
+- Identify and correct normalization issues in real scenarios.
 
 ---
 
-## 1. What Makes a Good Schema?
+## 1. What is Database Normalization?
 
-A well-designed schema:
-- Reflects business rules clearly
-- Supports scalability and migrations
-- Enforces data consistency
-- Avoids unnecessary coupling
-- Enables efficient querying
+Normalization is the process of organizing data in a database to:
 
-Good schema design is the foundation for data integrity and developer productivity.
+- Eliminate redundancy
+- Ensure data integrity
+- Simplify maintenance
+- Improve consistency
 
----
-
-## 2. Normalization vs Denormalization
-
-| Normalization                           | Denormalization                           |
-|----------------------------------------|--------------------------------------------|
-| Reduces redundancy                     | Reduces joins                               |
-| Better write consistency               | Faster read performance                     |
-| Fewer update anomalies                 | May introduce inconsistency                 |
-| Common for OLTP systems                | Common for OLAP or caching layers           |
-
-Use denormalization when:
-- Reads dominate over writes
-- Performance justifies redundancy
-- You can tolerate some duplication
+The process involves applying a series of normal forms (rules).
 
 ---
 
-## 3. Foreign Key Strategies in Microservices
+## 2. First Normal Form (1NF)
 
-### In monoliths:
-- Enforced in the database
+**Requirements:**
+- All columns contain atomic (indivisible) values.
+- No repeating groups or arrays.
 
-### In microservices:
-- Foreign keys may be dropped at DB level
-- Consistency is enforced at the application level
-- Avoid tight coupling between services
-
-Patterns:
-- Store foreign keys as UUIDs or references
-- Validate existence via APIs or background sync
-- Use event sourcing or changelogs
-
----
-
-## 4. Design Patterns for Data Boundaries
-
-- **DB-per-service** (recommended): Each service owns its own schema
-- **Shared DB** (anti-pattern): Multiple services query the same database
-- **API Composition**: Aggregate data at the API layer
-- **CQRS**: Separate read and write models
-
-Use **bounded context** to define logical schema ownership.
-
----
-
-## 5. Shared vs Private Schemas
-
-| Private Schema             | Shared Schema              |
-|----------------------------|----------------------------|
-| Owned by one service       | Used by multiple services  |
-| Can evolve independently   | Requires coordination      |
-| Enforces SRP               | Leads to tight coupling    |
-| Easier to test and deploy  | Higher risk of breaking changes |
-
-Recommendation: Always start with private schemas.
-
----
-
-## 6. Anti-Patterns in Schema Design
-
-- Foreign keys between microservices
-- Single table for multiple contexts
-- Duplicate data without sync mechanism
-- Implicit ownership
-- Abusing JSON fields to avoid normalization
-
----
-
-## 7. Naming Conventions and Consistency
-
-Best practices:
-- Use `snake_case` for table and column names
-- Prefix with context (e.g., `user_profile`)
-- Avoid reserved keywords
-- Be consistent in singular/plural use
-- Document schema changes (migrations)
-
-Example:
+**Violation Example:**
 
 ```sql
-CREATE TABLE customer_profile (
-    customer_id UUID PRIMARY KEY,
-    full_name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL
+CREATE TABLE student (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    subjects TEXT[] -- violates 1NF
+);
+```
+
+**Normalized:**
+
+```sql
+CREATE TABLE subject (
+    student_id INT,
+    subject_name TEXT,
+    PRIMARY KEY (student_id, subject_name)
 );
 ```
 
 ---
 
-## 8. Designing for Scalability and Migration
+## 3. Second Normal Form (2NF)
 
-- Use UUIDs or ULIDs as primary keys for distribution
-- Avoid sequential IDs in sharded systems
-- Plan for schema migrations using tools like Flyway or Liquibase
-- Keep migrations backward-compatible during rollouts
+**Requirements:**
+- Meet all 1NF rules.
+- Remove partial dependencies from composite primary keys.
 
----
-
-## 9. Read/Write Segregation
-
-Use **CQRS** to optimize:
-
-- Separate models for commands (writes) and queries (reads)
-- Allows independent scaling
-- Improves performance on read-heavy services
-
----
-
-## 10. Practice: Model the Schema for a Service
-
-### Scenario:
-
-You are designing a **Notification Service** that tracks messages sent to users.
-
-Requirements:
-- Store notifications with ID, type (EMAIL, SMS), payload, recipient, sent time, and status
-- Each notification belongs to a user
-- Must support querying by user and status
-
-### Task:
-
-Model a normalized schema that:
-- Defines clear ownership
-- Avoids unnecessary joins
-- Can evolve independently
-
-Example:
+**Violation Example:**
 
 ```sql
-CREATE TABLE notification (
-    id UUID PRIMARY KEY,
-    recipient_id UUID NOT NULL,
-    type TEXT CHECK (type IN ('EMAIL', 'SMS')),
-    payload JSONB NOT NULL,
-    status TEXT CHECK (status IN ('PENDING', 'SENT', 'FAILED')),
-    sent_at TIMESTAMP
+CREATE TABLE enrollment (
+    student_id INT,
+    course_id INT,
+    student_name TEXT, -- depends only on student_id
+    PRIMARY KEY (student_id, course_id)
+);
+```
+
+**Normalized:**
+
+```sql
+CREATE TABLE student (
+    student_id INT PRIMARY KEY,
+    student_name TEXT
+);
+
+CREATE TABLE enrollment (
+    student_id INT,
+    course_id INT,
+    PRIMARY KEY (student_id, course_id)
+);
+```
+
+---
+
+## 4. Third Normal Form (3NF)
+
+**Requirements:**
+- Meet all 2NF rules.
+- No transitive dependencies (non-key attribute depends on another non-key attribute).
+
+**Violation Example:**
+
+```sql
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    name TEXT,
+    department_id INT,
+    department_name TEXT -- transitive dependency
+);
+```
+
+**Normalized:**
+
+```sql
+CREATE TABLE departments (
+    id INT PRIMARY KEY,
+    name TEXT
+);
+
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    name TEXT,
+    department_id INT REFERENCES departments(id)
+);
+```
+
+---
+
+## 5. Boyce-Codd Normal Form (BCNF)
+
+Stricter than 3NF. Every determinant must be a candidate key.
+
+**Use case:** when there are multiple composite candidate keys.
+
+---
+
+## 6. Benefits of Normalization
+
+- Prevents data anomalies (update, delete, insert)
+- Ensures referential integrity
+- Saves space by reducing duplication
+- Makes data easier to query and maintain
+
+---
+
+## 7. When Not to Normalize (Fully)
+
+- For reporting/analytics (OLAP) → denormalization can improve performance
+- For heavy-read use cases → balance joins vs redundancy
+- For cache systems → flattened documents may be preferred
+
+---
+
+## 8. Practice: Normalize a Problematic Schema
+
+### Given:
+
+```sql
+CREATE TABLE orders (
+    id INT PRIMARY KEY,
+    customer_name TEXT,
+    customer_email TEXT,
+    item_name TEXT,
+    item_price DECIMAL
+);
+```
+
+### Normalize to 3NF:
+
+```sql
+CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    email TEXT
+);
+
+CREATE TABLE items (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    price DECIMAL
+);
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY,
+    customer_id INT REFERENCES customers(id),
+    item_id INT REFERENCES items(id)
 );
 ```
 
@@ -172,9 +190,9 @@ CREATE TABLE notification (
 
 In this session, you:
 
-- Analyzed schema principles for microservice architectures
-- Compared normalization and denormalization
-- Learned patterns for schema independence and scalability
-- Modeled a schema with isolation, flexibility, and readability
+- Learned and applied 1NF, 2NF, 3NF, and BCNF
+- Designed normalized schemas to eliminate redundancy
+- Saw where normalization helps and where denormalization is preferable
+- Practiced converting flat structures into normalized forms
 
-Next session: **Normalized Database Design**
+Next session: **Query Analysis for Defect Resolution**
