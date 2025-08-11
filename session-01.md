@@ -110,54 +110,8 @@ Use `.psqlrc` for preconfigured settings.
 
 ## 7. Practice: Custom Docker Image with PostgreSQL
 
-### Goal
 
-Create a Docker image based on the official PostgreSQL image that:
-
-- Includes a custom `postgresql.conf`
-- Mounts local folders for data
-- Pre-configures the DB user and database
-
-### Folder structure:
-
-```
-custom-postgres/
-├── Dockerfile
-├── postgresql.conf
-└── data/  # for persistent volume
-```
-
-### postgresql.conf (example)
-
-```conf
-max_connections = 150
-shared_buffers = 512MB
-work_mem = 8MB
-wal_level = logical
-```
-
-### Dockerfile
-
-```dockerfile
-FROM postgres:15
-
-COPY postgresql.conf /etc/postgresql/postgresql.conf
-
-ENV POSTGRES_USER=admin
-ENV POSTGRES_PASSWORD=admin
-ENV POSTGRES_DB=myapp
-
-CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
-```
-
-### Run:
-
-```bash
-docker build -t custom-postgres .
-docker run -d \
-  -v $(pwd)/data:/var/lib/postgresql/data \
-  -p 5432:5432 custom-postgres
-```
+[Practice statement](exercise-custom-postgres-image.md) 
 
 ---
 
