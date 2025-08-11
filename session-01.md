@@ -11,6 +11,7 @@
 - Explore configuration options and tuning techniques.
 - Compare PostgreSQL and MySQL in distributed setups.
 - Learn about ACID properties and their implementation in PostgreSQL.
+- Learn about users and roles in postgres.
 - Use PostgreSQL CLI tools and Docker for practical setup.
 
 ---
@@ -68,7 +69,7 @@ PostgreSQL is fully ACID-compliant:
 
 ---
 
-## 5. Configuration Overview
+## 5. Configuration Overview and practice
 
 The file `postgresql.conf` controls server behavior.
 
@@ -84,9 +85,19 @@ wal_level = replica
 
 Use tools like [pgtune](https://pgtune.leopard.in.ua/) to calculate ideal values based on system specs.
 
+[Practice statement](exercise-custom-postgres-image.md) 
+
 ---
 
-## 6. psql CLI and Automation
+## 6. Users and Roles in PostgreSQL
+
+-	Roles vs users, login/no-login, inheritance, group roles
+-	Privileges & scopes (DB/SCHEMA/TABLE/SEQUENCE), GRANT/REVOKE, ALTER DEFAULT PRIVILEGES
+-	psql shortcuts: \du, \dg, \dp
+-	Quick lab: [secure a schema for an app owner vs app user](exercise-users-and-roles.md) 
+
+
+## 7. psql CLI and Automation
 
 `psql` is PostgreSQL’s interactive terminal.
 
@@ -110,13 +121,6 @@ psql -U postgres -d mydb -f init.sql
 ```
 
 Use `.psqlrc` for preconfigured settings.
-
----
-
-## 7. Practice: Custom Docker Image with PostgreSQL
-
-
-[Practice statement](exercise-custom-postgres-image.md) 
 
 ---
 
