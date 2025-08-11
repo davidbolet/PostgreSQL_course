@@ -45,7 +45,7 @@ The course is structured into 8 sessions: 3 sessions of 5 hours for foundational
 
 ### PostgreSQL
 
-- [Postgres config](postgres-config-parameters.md)
+- [Config parameters CheatSheet](postgres-config-parameters.md)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [pgAdmin GUI](https://www.pgadmin.org/)
 - [psql CLI Tool](https://www.postgresql.org/docs/current/app-psql.html)
