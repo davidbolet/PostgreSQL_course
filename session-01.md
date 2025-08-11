@@ -166,6 +166,7 @@ docker run -d \
 | Tool               | Type      | Notes                            |
 |--------------------|-----------|----------------------------------|
 | pgAdmin            | GUI       | Official PostgreSQL admin tool   |
+| DBVisualizer       | GUI       | Multi-database, free version     |
 | DBeaver            | GUI       | Multi-database, open-source      |
 | DataGrip           | IDE       | JetBrains commercial tool        |
 | TablePlus          | GUI       | Lightweight, fast, user-friendly |
