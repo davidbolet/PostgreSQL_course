@@ -1,6 +1,6 @@
 # PostgreSQL Configuration Cheat Sheet (Focused Parameters)
 
-Below are concise, practical explanations of each parameter you asked about, including what it controls, what your current value implies, and tuning tips.
+Below are concise, practical explanations of each parameter, including what it controls, what your current value implies, and tuning tips.
 
 ```conf
 max_connections = 100
