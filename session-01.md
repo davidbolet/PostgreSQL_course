@@ -6,11 +6,16 @@
 
 ## 🧠 Objectives
 
+- Core concepts overview
 - Understand PostgreSQL architecture and internal processes.
 - Explore configuration options and tuning techniques.
 - Compare PostgreSQL and MySQL in distributed setups.
 - Learn about ACID properties and their implementation in PostgreSQL.
 - Use PostgreSQL CLI tools and Docker for practical setup.
+
+---
+
+## 0. Core concepts overview
 
 ---
 
