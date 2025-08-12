@@ -187,6 +187,14 @@ CREATE TABLE orders (
 
 ---
 
+## 9. JSONB
+
+- [Lab: Using JSONB from Java](lab-jsonb.md)
+
+---
+
+
+
 ## ✅ Summary
 
 In this session, you:
