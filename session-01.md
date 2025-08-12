@@ -13,6 +13,7 @@
 - Learn about ACID properties and their implementation in PostgreSQL.
 - Learn about users and roles in postgres.
 - Use PostgreSQL CLI tools and Docker for practical setup.
+- Learn different ways to connect to PostgreSQL from java.
 
 ---
 
@@ -124,7 +125,15 @@ Use `.psqlrc` for preconfigured settings.
 
 ---
 
-## 8. Recommended Client Tools
+## 8. Connecting from Java and introducing JSONB
+
+[Guide to Java drivers](postgres-java-drivers.md)
+[Lab: Connection types](lab-connection-types.md)
+[Lab: Introduction to JSONB](lab-jsonb.md)
+
+---
+
+## 9. Recommended Client Tools
 
 | Tool               | Type      | Notes                            |
 |--------------------|-----------|----------------------------------|
