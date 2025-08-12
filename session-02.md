@@ -11,6 +11,7 @@
 - Explore the benefits and trade-offs of normalization.
 - Practice designing normalized schemas.
 - Identify and correct normalization issues in real scenarios.
+- Learn what is JSONB and when is it worth using it.
 
 ---
 
