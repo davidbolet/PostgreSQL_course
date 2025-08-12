@@ -1,0 +1,12 @@
+docker stop pg
+docker rm pg
+
+# Persist data with a named volume; mount your host SQL dir read-only at /sql
+docker run -d --name pg -p 5432:5432 \
+  -e POSTGRES_PASSWORD=postgres \
+  -v pgdata:/var/lib/postgresql/data \
+  -v "~/development/sql":/sql:ro \
+  postgres:16
+
+# Then run your scripts
+docker exec -it pg psql -U postgres -d postgres -f /sql/setup.sql
