@@ -125,11 +125,10 @@ Use `.psqlrc` for preconfigured settings.
 
 ---
 
-## 8. Connecting from Java and introducing JS ONB
+## 8. Connecting from Java: JDBC vs R2DBC
 
 - [Guide to Java drivers](postgres-java-drivers.md)
 - [Lab: Connection types](lab-connection-types.md)
-- [Lab: Introduction to JSONB](lab-jsonb.md)
 
 ---
 
