@@ -16,6 +16,8 @@ CREATE INDEX IF NOT EXISTS idx_events_payload_gin ON app.events USING gin (paylo
 ```
 
 ## 1) Insert JSONB from Java (JDBC)
+Download the Java project [here](pg-lab-jsonb.zip)
+
 ```java
 PGobject jb = new PGobject();
 jb.setType("jsonb");
