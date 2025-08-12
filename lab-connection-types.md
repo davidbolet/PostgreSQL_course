@@ -6,6 +6,7 @@
 - PostgreSQL running (Docker is fine).
 - Java 17+, Maven.
 - Create DB `myapp` and user `app_user` with rights.
+- Project: You can download a [working solution](pg-lab-connection-types.zip) Check README for executing
 
 ```sql
 CREATE ROLE app_user LOGIN PASSWORD 'secret';
