@@ -1,0 +1,96 @@
+{
+  "info": {
+    "name": "Normalization Lab - Anomalies API",
+    "_postman_id": "96484654-8fc0-48d5-93b2-f9948041bff5",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection to call the Spring Boot AnomaliesController (1NF, 2NF, 3NF)."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string",
+      "description": "Base URL for the Spring Boot app"
+    }
+  ],
+  "item": [
+    {
+      "name": "1NF anomalies",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/anomalies/1nf",
+        "description": "Shows non-atomic values and repeating groups; expects lab.orders_flat and lab.customers_bad to exist."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response is an object', function () { pm.expect(pm.response.json()).to.be.an('object'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2NF anomalies",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/anomalies/2nf",
+        "description": "Shows partial dependency flags for lab.order_items_denorm."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response is an object', function () { pm.expect(pm.response.json()).to.be.an('object'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3NF anomalies",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/anomalies/3nf",
+        "description": "Shows transitive dependency issues for lab.employees_denorm (location/department variants)."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response is an object', function () { pm.expect(pm.response.json()).to.be.an('object'); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
