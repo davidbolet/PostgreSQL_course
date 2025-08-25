@@ -1,0 +1,525 @@
+{
+	"info": {
+		"_postman_id": "postgres-transfer-service-collection",
+		"name": "PostgreSQL Transfer Service",
+		"description": "API collection for the PostgreSQL Transfer Service - a banking application that implements fund transfers with pessimistic and optimistic locking, retries, and audit logging.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Initialize Database",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/api/seed",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"seed"
+					]
+				},
+				"description": "Initialize the database with sample accounts:\n- Account A-001: $100.00\n- Account A-002: $50.00\n\nThis endpoint should be called once before testing transfers to ensure the database has the required test data."
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/api/seed",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"seed"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"ok\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "Transfer Funds - Success Case",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "from",
+							"value": "A-001",
+							"description": "Source account number",
+							"type": "text"
+						},
+						{
+							"key": "to",
+							"value": "A-002",
+							"description": "Destination account number",
+							"type": "text"
+						},
+						{
+							"key": "amount",
+							"value": "25.00",
+							"description": "Amount to transfer (must be positive)",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/transfer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"transfer"
+					]
+				},
+				"description": "Transfer $25.00 from account A-001 to A-002.\n\nThis is a successful transfer scenario where:\n- Source account (A-001) has sufficient funds ($100.00)\n- Amount ($25.00) is positive and valid\n- Both accounts exist in the database\n\nExpected result: Status OK with transaction ID and updated balances."
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "from",
+									"value": "A-001",
+									"type": "text"
+								},
+								{
+									"key": "to",
+									"value": "A-002",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "25.00",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transfer",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"transfer"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"OK\",\n    \"message\": \"committed\",\n    \"txId\": 1\n}"
+				}
+			]
+		},
+		{
+			"name": "Transfer Funds - Insufficient Funds",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "from",
+							"value": "A-002",
+							"description": "Source account with limited funds",
+							"type": "text"
+						},
+						{
+							"key": "to",
+							"value": "A-001",
+							"description": "Destination account",
+							"type": "text"
+						},
+						{
+							"key": "amount",
+							"value": "100.00",
+							"description": "Amount exceeding available balance",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/transfer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"transfer"
+					]
+				},
+				"description": "Attempt to transfer $100.00 from account A-002 to A-001.\n\nThis will fail because:\n- Source account (A-002) only has $50.00\n- Requested amount ($100.00) exceeds available balance\n- The system should prevent overdrafts\n\nExpected result: Status INSUFFICIENT_FUNDS with appropriate error message."
+			},
+			"response": [
+				{
+					"name": "Insufficient Funds Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "from",
+									"value": "A-002",
+									"type": "text"
+								},
+								{
+									"key": "to",
+									"value": "A-001",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "100.00",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transfer",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"transfer"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"INSUFFICIENT_FUNDS\",\n    \"message\": \"insufficient funds\",\n    \"txId\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Transfer Funds - Small Amount",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "from",
+							"value": "A-001",
+							"description": "Source account",
+							"type": "text"
+						},
+						{
+							"key": "to",
+							"value": "A-002",
+							"description": "Destination account",
+							"type": "text"
+						},
+						{
+							"key": "amount",
+							"value": "0.01",
+							"description": "Minimum transfer amount",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/transfer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"transfer"
+					]
+				},
+				"description": "Transfer $0.01 from account A-001 to A-002.\n\nThis tests:\n- Minimum amount validation\n- Precision handling for small amounts\n- Edge case with very small transfers\n\nExpected result: Status OK with transaction ID."
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer Funds - Invalid Account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "from",
+							"value": "A-001",
+							"description": "Valid source account",
+							"type": "text"
+						},
+						{
+							"key": "to",
+							"value": "INVALID-999",
+							"description": "Non-existent destination account",
+							"type": "text"
+						},
+						{
+							"key": "amount",
+							"value": "10.00",
+							"description": "Valid amount",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/transfer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"transfer"
+					]
+				},
+				"description": "Attempt to transfer to a non-existent account.\n\nThis tests:\n- Account existence validation\n- Error handling for invalid account numbers\n- System resilience against invalid input\n\nExpected result: Error response (likely 500 Internal Server Error) due to account not found."
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer Funds - Zero Amount",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "from",
+							"value": "A-001",
+							"description": "Source account",
+							"type": "text"
+						},
+						{
+							"key": "to",
+							"value": "A-002",
+							"description": "Destination account",
+							"type": "text"
+						},
+						{
+							"key": "amount",
+							"value": "0.00",
+							"description": "Zero amount (invalid)",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/transfer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"transfer"
+					]
+				},
+				"description": "Attempt to transfer $0.00 between accounts.\n\nThis tests:\n- Business rule validation (amount must be > 0)\n- Input validation and error handling\n- System behavior with edge case values\n\nExpected result: Status ERROR with message 'amount must be > 0'."
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer Funds - Negative Amount",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "from",
+							"value": "A-001",
+							"description": "Source account",
+							"type": "text"
+						},
+						{
+							"key": "to",
+							"value": "A-002",
+							"description": "Destination account",
+							"type": "text"
+						},
+						{
+							"key": "amount",
+							"value": "-10.00",
+							"description": "Negative amount (invalid)",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/transfer",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"transfer"
+					]
+				},
+				"description": "Attempt to transfer -$10.00 between accounts.\n\nThis tests:\n- Business rule validation (amount must be positive)\n- Input validation for negative values\n- System behavior with invalid input\n\nExpected result: Status ERROR with message 'amount must be > 0'."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Pre-request script to set up any necessary data",
+					"console.log('Executing pre-request script for: ' + pm.request.name);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Test script to validate responses",
+					"pm.test('Response time is less than 2000ms', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});",
+					"",
+					"pm.test('Status code is 200', function () {",
+					"    pm.expect(pm.response.code).to.eql(200);",
+					"});",
+					"",
+					"// Additional tests based on the request",
+					"if (pm.request.name === 'Initialize Database') {",
+					"    pm.test('Seed response contains ok: true', function () {",
+					"        const jsonData = pm.response.json();",
+					"        pm.expect(jsonData.ok).to.eql(true);",
+					"    });",
+					"}",
+					"",
+					"if (pm.request.name.includes('Transfer Funds')) {",
+					"    pm.test('Transfer response has required fields', function () {",
+					"        const jsonData = pm.response.json();",
+					"        pm.expect(jsonData).to.have.property('status');",
+					"        pm.expect(jsonData).to.have.property('message');",
+					"        pm.expect(jsonData).to.have.property('txId');",
+					"    });",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string",
+			"description": "Base URL for the PostgreSQL Transfer Service API"
+		},
+		{
+			"key": "account_001",
+			"value": "A-001",
+			"type": "string",
+			"description": "Test account A-001 with initial balance of $100.00"
+		},
+		{
+			"key": "account_002",
+			"value": "A-002",
+			"type": "string",
+			"description": "Test account A-002 with initial balance of $50.00"
+		},
+		{
+			"key": "valid_amount",
+			"value": "25.00",
+			"type": "string",
+			"description": "Valid transfer amount for testing"
+		},
+		{
+			"key": "invalid_amount",
+			"value": "100.00",
+			"type": "string",
+			"description": "Amount that exceeds A-002's balance for testing insufficient funds scenario"
+		}
+	]
+}
