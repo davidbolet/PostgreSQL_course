@@ -1,37 +1,37 @@
-# Postgres Transfer Service
+# PostgreSQL Transfer Service
 
-Un servicio de transferencia bancaria construido con Spring Boot que implementa transferencias de fondos con bloqueo pesimista y optimista, reintentos y auditoría.
+A banking transfer service built with Spring Boot that implements fund transfers with pessimistic and optimistic locking, retries, and audit logging.
 
-## Características
+## Features
 
-- **Transferencias de fondos** con validación de saldo
-- **Bloqueo pesimista** para evitar condiciones de carrera
-- **Bloqueo optimista** con reintentos automáticos
-- **Auditoría completa** de todas las operaciones
-- **API REST** para operaciones bancarias
-- **Base de datos PostgreSQL** con esquema optimizado
+- **Fund transfers** with balance validation
+- **Pessimistic locking** to prevent race conditions
+- **Optimistic locking** with automatic retries
+- **Complete audit** of all operations
+- **REST API** for banking operations
+- **PostgreSQL database** with optimized schema
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 src/main/java/com/example/bank/
-├── Application.java                 # Clase principal de Spring Boot
+├── Application.java                 # Spring Boot main class
 ├── controller/
-│   └── ApiController.java          # Controlador REST para operaciones bancarias
+│   └── ApiController.java          # REST controller for banking operations
 ├── service/
-│   └── TransferService.java        # Lógica de negocio para transferencias
+│   └── TransferService.java        # Business logic for transfers
 ├── repository/
-│   ├── AccountRepository.java      # Repositorio para cuentas bancarias
-│   ├── TransactionRepository.java  # Repositorio para transacciones
-│   └── AuditLogRepository.java     # Repositorio para logs de auditoría
+│   ├── AccountRepository.java      # Repository for bank accounts
+│   ├── TransactionRepository.java  # Repository for transactions
+│   └── AuditLogRepository.java     # Repository for audit logs
 └── model/
-    ├── Account.java                # Entidad de cuenta bancaria
-    ├── Transaction.java            # Entidad de transacción
-    ├── AuditLog.java               # Entidad de log de auditoría
-    └── TransferResult.java         # Resultado de transferencia
+    ├── Account.java                # Bank account entity
+    ├── Transaction.java            # Transaction entity
+    ├── AuditLog.java               # Audit log entity
+    └── TransferResult.java         # Transfer result
 ```
 
-## Tecnologías Utilizadas
+## Technologies Used
 
 - **Java 17**
 - **Spring Boot 3.3.2**
@@ -39,47 +39,51 @@ src/main/java/com/example/bank/
 - **PostgreSQL**
 - **Maven**
 
-## Endpoints de la API
+## API Endpoints
 
 ### POST /api/seed
-Inicializa la base de datos con cuentas de prueba:
-- Cuenta A-001: $100.00
-- Cuenta A-002: $50.00
+Initializes the database with test accounts:
+- Account A-001: $100.00
+- Account A-002: $50.00
 
 ### POST /api/transfer
-Realiza una transferencia entre cuentas:
-- `from`: Número de cuenta origen
-- `to`: Número de cuenta destino  
-- `amount`: Monto a transferir
+Performs a transfer between accounts:
+- `from`: Source account number
+- `to`: Destination account number  
+- `amount`: Amount to transfer
 
-## Configuración
+## Configuration
 
-El proyecto utiliza `application.properties` para la configuración de la base de datos y `schema.sql` para crear las tablas necesarias.
+The project uses `application.properties` for database configuration and `schema.sql` to create the necessary tables.
 
-## Compilación y Ejecución
+## Statement
+
+Complete the TransferService.java to a working solution, matching Fund Transfer System explained 
+
+## Build and Execution
 
 ```bash
-# Compilar el proyecto
+# Compile the project
 mvn clean compile
 
-# Empaquetar (sin tests)
+# Package (without tests)
 mvn package -DskipTests
 
-# Ejecutar
+# Run
 java -jar target/postgres-transfer-service-0.0.1-SNAPSHOT.jar
 ```
 
-## Características de Seguridad
+## Security Features
 
-- **Bloqueo pesimista** en cuentas durante transferencias
-- **Validación de saldo** antes de procesar
-- **Transacciones atómicas** con rollback automático
-- **Reintentos automáticos** en caso de conflictos de bloqueo optimista
-- **Auditoría completa** de todas las operaciones
+- **Pessimistic locking** on accounts during transfers
+- **Balance validation** before processing
+- **Atomic transactions** with automatic rollback
+- **Automatic retries** in case of optimistic locking conflicts
+- **Complete audit** of all operations
 
-## Base de Datos
+## Database
 
-El esquema incluye:
-- `bank.account`: Cuentas bancarias con control de versión
-- `bank.tx`: Transacciones con estado y timestamps
-- `bank.audit_log`: Logs de auditoría en formato JSONB
+The schema includes:
+- `bank.account`: Bank accounts with version control
+- `bank.tx`: Transactions with status and timestamps
+- `bank.audit_log`: Audit logs in simple text format
