@@ -1,0 +1,15 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    command: ["redis-server", "--appendonly", "yes"]
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    ports: ["5540:5540"]
+    volumes: ["redisinsight:/data"]
+    environment:
+      RI_ACCEPT_TERMS_AND_CONDITIONS: "yes"
+
+volumes:
+  redisinsight:
