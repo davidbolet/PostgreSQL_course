@@ -1,0 +1,448 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Product Catalog API",
+		"description": "API completa para gestionar un catálogo de productos con PostgreSQL y Spring Data JPA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "Products - CRUD Operations",
+			"item": [
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Wireless Headphones\",\n  \"category\": \"Electronics\",\n  \"price\": 199.99,\n  \"tags\": [\"wireless\", \"audio\", \"bluetooth\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/PROD001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"PROD001"
+							]
+						},
+						"description": "Crea un nuevo producto. Si el productId ya existe, devuelve error 400."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/PROD001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"PROD001"
+							]
+						},
+						"description": "Obtiene un producto por su productId. Incrementa automáticamente el contador de vistas."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Wireless Headphones\",\n  \"category\": \"Electronics\",\n  \"price\": 249.99,\n  \"tags\": [\"wireless\", \"audio\", \"bluetooth\", \"premium\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/PROD001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"PROD001"
+							]
+						},
+						"description": "Actualiza un producto existente. Si el productId no existe, devuelve error 404."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/PROD001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"PROD001"
+							]
+						},
+						"description": "Elimina un producto por su productId."
+					},
+					"response": []
+				}
+			],
+			"description": "Operaciones CRUD básicas para productos"
+		},
+		{
+			"name": "Products - Query Operations",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						},
+						"description": "Obtiene todos los productos del catálogo."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/search?q=gaming",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "gaming",
+									"description": "Término de búsqueda (nombre o categoría)"
+								}
+							]
+						},
+						"description": "Busca productos por nombre o categoría. La búsqueda es case-insensitive."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/category/Electronics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"category",
+								"Electronics"
+							]
+						},
+						"description": "Obtiene todos los productos de una categoría específica."
+					},
+					"response": []
+				}
+			],
+			"description": "Operaciones de consulta y búsqueda de productos"
+		},
+		{
+			"name": "Products - Statistics & Analytics",
+			"item": [
+				{
+					"name": "Get Top Viewed Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/top?limit=5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"top"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5",
+									"description": "Número máximo de productos a retornar (por defecto 10)"
+								}
+							]
+						},
+						"description": "Obtiene los productos más vistos, ordenados por número de visualizaciones."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Top Viewed by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/top/category/Electronics?limit=3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"top",
+								"category",
+								"Electronics"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3",
+									"description": "Número máximo de productos a retornar (por defecto 10)"
+								}
+							]
+						},
+						"description": "Obtiene los productos más vistos de una categoría específica."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product View Count",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/PROD001/views",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"PROD001",
+								"views"
+							]
+						},
+						"description": "Obtiene el contador de vistas de un producto específico."
+					},
+					"response": []
+				}
+			],
+			"description": "Estadísticas y análisis de productos"
+		},
+		{
+			"name": "Test Scenarios",
+			"item": [
+				{
+					"name": "Test Duplicate Product Creation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test Product\",\n  \"category\": \"Test\",\n  \"price\": 99.99,\n  \"tags\": [\"test\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/TEST001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"TEST001"
+							]
+						},
+						"description": "Primera creación del producto TEST001 - debería devolver 200"
+					},
+					"response": []
+				},
+				{
+					"name": "Test Duplicate Product Error",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Another Test Product\",\n  \"category\": \"Test\",\n  \"price\": 149.99,\n  \"tags\": [\"test\", \"duplicate\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/TEST001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"TEST001"
+							]
+						},
+						"description": "Segunda creación del mismo producto TEST001 - debería devolver 400 (Bad Request)"
+					},
+					"response": []
+				},
+				{
+					"name": "Test Update Non-existent Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Non-existent Product\",\n  \"category\": \"Test\",\n  \"price\": 99.99,\n  \"tags\": [\"test\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/NONEXISTENT",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"NONEXISTENT"
+							]
+						},
+						"description": "Intenta actualizar un producto que no existe - debería devolver 404 (Not Found)"
+					},
+					"response": []
+				},
+				{
+					"name": "Test Invalid Product Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"\",\n  \"category\": \"Test\",\n  \"price\": -10.00,\n  \"tags\": [\"test\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/INVALID001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"INVALID001"
+							]
+						},
+						"description": "Intenta crear un producto con datos inválidos - debería devolver 400 (Bad Request)"
+					},
+					"response": []
+				}
+			],
+			"description": "Escenarios de prueba para validar el comportamiento de la API"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Pre-request script para logging",
+					"console.log('Making request to: ' + pm.request.url);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Test script para validar respuestas",
+					"pm.test('Status code is valid', function () {",
+					"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 400, 404, 500]);",
+					"});",
+					"",
+					"pm.test('Response has required fields', function () {",
+					"    if (pm.response.code === 200 || pm.response.code === 201) {",
+					"        const responseJson = pm.response.json();",
+					"        pm.expect(responseJson).to.have.property('message');",
+					"    }",
+					"});",
+					"",
+					"pm.test('Response time is acceptable', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string",
+			"description": "URL base de la API"
+		},
+		{
+			"key": "product_id",
+			"value": "PROD001",
+			"type": "string",
+			"description": "ID de producto de ejemplo"
+		},
+		{
+			"key": "category",
+			"value": "Electronics",
+			"type": "string",
+			"description": "Categoría de ejemplo"
+		}
+	]
+}

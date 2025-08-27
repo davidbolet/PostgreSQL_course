@@ -1,0 +1,9 @@
+com/session7/catalog/GlobalExceptionHandler.class
+com/session7/catalog/ProductController.class
+com/session7/catalog/CatalogApplication.class
+com/session7/catalog/ProductService.class
+com/session7/catalog/ProductRepository.class
+com/session7/catalog/ProductNotFoundException.class
+com/session7/catalog/ProductAlreadyExistsException.class
+com/session7/catalog/ProductServiceImpl.class
+com/session7/catalog/Product.class
