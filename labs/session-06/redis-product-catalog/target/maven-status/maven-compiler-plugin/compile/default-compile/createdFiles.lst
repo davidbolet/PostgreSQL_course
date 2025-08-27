@@ -1,0 +1,5 @@
+com/example/catalog/RedisConfig.class
+com/example/catalog/Product.class
+com/example/catalog/ProductController.class
+com/example/catalog/ProductService.class
+com/example/catalog/CatalogApplication.class

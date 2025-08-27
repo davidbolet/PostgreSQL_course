@@ -1,0 +1,801 @@
+{
+	"info": {
+		"_postman_id": "redis-product-catalog-api",
+		"name": "Redis Product Catalog API",
+		"description": "API completa para el catálogo de productos con Redis repositories. Incluye endpoints para CRUD básico, búsquedas avanzadas, seguimiento de vistas y funcionalidades con TTL.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "redis-product-catalog"
+	},
+	"item": [
+		{
+			"name": "Productos - CRUD Básico",
+			"item": [
+				{
+					"name": "Crear/Actualizar Producto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"MacBook Pro 16\\\"\",\n  \"category\": \"electronics\",\n  \"tags\": [\"laptop\", \"apple\", \"professional\"],\n  \"price\": 2499.99\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/laptop-001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"laptop-001"
+							]
+						},
+						"description": "Crea o actualiza un producto. El ID se especifica en la URL. Si se proporciona ttlSeconds, el producto expirará automáticamente."
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Producto con TTL",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Oferta Flash - Auriculares\",\n  \"category\": \"electronics\",\n  \"tags\": [\"headphones\", \"sale\", \"limited\"],\n  \"price\": 19.99\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/flash-sale-001?ttlSeconds=120",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"flash-sale-001"
+							],
+							"query": [
+								{
+									"key": "ttlSeconds",
+									"value": "120",
+									"description": "Tiempo de vida en segundos (2 minutos)"
+								}
+							]
+						},
+						"description": "Crea un producto que expirará automáticamente después de 120 segundos (2 minutos)."
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Producto por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/laptop-001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"laptop-001"
+							]
+						},
+						"description": "Obtiene un producto por su ID. También incrementa el contador de vistas del producto."
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Producto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/laptop-001",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"laptop-001"
+							]
+						},
+						"description": "Elimina un producto del catálogo y también lo remueve del ranking de vistas."
+					},
+					"response": []
+				}
+			],
+			"description": "Operaciones básicas CRUD para productos individuales."
+		},
+		{
+			"name": "Búsquedas por Categoría",
+			"item": [
+				{
+					"name": "Productos por Categoría",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/category/electronics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"category",
+								"electronics"
+							]
+						},
+						"description": "Obtiene todos los productos de una categoría específica. Utiliza el índice automático en el campo 'category'."
+					},
+					"response": []
+				},
+				{
+					"name": "Productos por Categoría - Ropa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/category/clothing",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"category",
+								"clothing"
+							]
+						},
+						"description": "Ejemplo de búsqueda por categoría 'clothing'."
+					},
+					"response": []
+				},
+				{
+					"name": "Productos por Categoría - Libros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/category/books",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"category",
+								"books"
+							]
+						},
+						"description": "Ejemplo de búsqueda por categoría 'books'."
+					},
+					"response": []
+				}
+			],
+			"description": "Búsquedas utilizando el campo 'category' indexado para consultas eficientes."
+		},
+		{
+			"name": "Búsquedas por Precio",
+			"item": [
+				{
+					"name": "Productos por Rango de Precio",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/price/range?minPrice=20&maxPrice=100",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"price",
+								"range"
+							],
+							"query": [
+								{
+									"key": "minPrice",
+									"value": "20",
+									"description": "Precio mínimo"
+								},
+								{
+									"key": "maxPrice",
+									"value": "100",
+									"description": "Precio máximo"
+								}
+							]
+						},
+						"description": "Obtiene productos dentro de un rango de precios específico. Utiliza el índice automático en el campo 'price'."
+					},
+					"response": []
+				},
+				{
+					"name": "Productos Menores a un Precio",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/price/less-than?price=50",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"price",
+								"less-than"
+							],
+							"query": [
+								{
+									"key": "price",
+									"value": "50",
+									"description": "Precio máximo"
+								}
+							]
+						},
+						"description": "Obtiene todos los productos con precio menor al especificado."
+					},
+					"response": []
+				},
+				{
+					"name": "Productos Mayores a un Precio",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/price/greater-than?price=1000",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"price",
+								"greater-than"
+							],
+							"query": [
+								{
+									"key": "price",
+									"value": "1000",
+									"description": "Precio mínimo"
+								}
+							]
+						},
+						"description": "Obtiene todos los productos con precio mayor al especificado."
+					},
+					"response": []
+				}
+			],
+			"description": "Búsquedas utilizando el campo 'price' indexado para consultas por rangos y comparaciones."
+		},
+		{
+			"name": "Búsquedas por Tags",
+			"item": [
+				{
+					"name": "Productos por Tag",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/tags?tag=sale",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "sale",
+									"description": "Tag a buscar"
+								}
+							]
+						},
+						"description": "Obtiene todos los productos que contengan un tag específico."
+					},
+					"response": []
+				},
+				{
+					"name": "Productos por Tag - Professional",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/tags?tag=professional",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "professional",
+									"description": "Tag 'professional'"
+								}
+							]
+						},
+						"description": "Ejemplo de búsqueda por tag 'professional'."
+					},
+					"response": []
+				},
+				{
+					"name": "Productos por Tag - Electronics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/tags?tag=electronics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "electronics",
+									"description": "Tag 'electronics'"
+								}
+							]
+						},
+						"description": "Ejemplo de búsqueda por tag 'electronics'."
+					},
+					"response": []
+				}
+			],
+			"description": "Búsquedas en el array de tags de los productos."
+		},
+		{
+			"name": "Búsquedas por Fecha",
+			"item": [
+				{
+					"name": "Productos Recientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/recent?daysAgo=7",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"recent"
+							],
+							"query": [
+								{
+									"key": "daysAgo",
+									"value": "7",
+									"description": "Número de días hacia atrás (por defecto: 7)"
+								}
+							]
+						},
+						"description": "Obtiene productos agregados recientemente. Utiliza el campo 'updatedAt' indexado para búsquedas eficientes por tiempo."
+					},
+					"response": []
+				},
+				{
+					"name": "Productos de Últimas 24 Horas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/recent?daysAgo=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"recent"
+							],
+							"query": [
+								{
+									"key": "daysAgo",
+									"value": "1",
+									"description": "Últimas 24 horas"
+								}
+							]
+						},
+						"description": "Obtiene productos agregados en las últimas 24 horas."
+					},
+					"response": []
+				},
+				{
+					"name": "Productos de Último Mes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/recent?daysAgo=30",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"recent"
+							],
+							"query": [
+								{
+									"key": "daysAgo",
+									"value": "30",
+									"description": "Último mes"
+								}
+							]
+						},
+						"description": "Obtiene productos agregados en el último mes."
+					},
+					"response": []
+				}
+			],
+			"description": "Búsquedas utilizando el campo 'updatedAt' indexado para consultas por tiempo."
+		},
+		{
+			"name": "Búsquedas Combinadas",
+			"item": [
+				{
+					"name": "Búsqueda por Categoría y Rango de Precio",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/search?category=electronics&minPrice=100&maxPrice=3000",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "electronics",
+									"description": "Categoría del producto"
+								},
+								{
+									"key": "minPrice",
+									"value": "100",
+									"description": "Precio mínimo"
+								},
+								{
+									"key": "maxPrice",
+									"value": "3000",
+									"description": "Precio máximo"
+								}
+							]
+						},
+						"description": "Búsqueda combinada que filtra por categoría y rango de precio. Ejemplo: productos de electrónica entre $100 y $3000."
+					},
+					"response": []
+				},
+				{
+					"name": "Búsqueda por Categoría y Rango de Precio - Ropa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/search?category=clothing&minPrice=10&maxPrice=200",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "clothing",
+									"description": "Categoría 'clothing'"
+								},
+								{
+									"key": "minPrice",
+									"value": "10",
+									"description": "Precio mínimo $10"
+								},
+								{
+									"key": "maxPrice",
+									"value": "200",
+									"description": "Precio máximo $200"
+								}
+							]
+						},
+						"description": "Ejemplo de búsqueda combinada para ropa en un rango de precio específico."
+					},
+					"response": []
+				}
+			],
+			"description": "Búsquedas que combinan múltiples criterios para filtros más específicos."
+		},
+		{
+			"name": "Seguimiento de Vistas",
+			"item": [
+				{
+					"name": "Productos Más Vistos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/top?limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"top"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Número de productos a retornar (por defecto: 10)"
+								}
+							]
+						},
+						"description": "Obtiene los productos más vistos ordenados por número de vistas. Utiliza Redis Sorted Sets para el ranking."
+					},
+					"response": []
+				},
+				{
+					"name": "Top 5 Productos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/top?limit=5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"top"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5",
+									"description": "Top 5 productos"
+								}
+							]
+						},
+						"description": "Obtiene los 5 productos más vistos."
+					},
+					"response": []
+				},
+				{
+					"name": "Contador de Vistas de un Producto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products/laptop-001/views",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"laptop-001",
+								"views"
+							]
+						},
+						"description": "Obtiene el número total de vistas de un producto específico."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints relacionados con el seguimiento y ranking de productos por número de vistas."
+		},
+		{
+			"name": "Ejemplos de Datos",
+			"item": [
+				{
+					"name": "Crear Producto de Electrónica",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"iPhone 15 Pro\",\n  \"category\": \"electronics\",\n  \"tags\": [\"phone\", \"apple\", \"smartphone\", \"5g\"],\n  \"price\": 999.99\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/iphone-15-pro",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"iphone-15-pro"
+							]
+						},
+						"description": "Ejemplo de producto de electrónica con tags detallados."
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Producto de Ropa",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Jeans Slim Fit Premium\",\n  \"category\": \"clothing\",\n  \"tags\": [\"jeans\", \"denim\", \"slim-fit\", \"premium\"],\n  \"price\": 89.99\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/jeans-premium",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"jeans-premium"
+							]
+						},
+						"description": "Ejemplo de producto de ropa premium."
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Producto de Libros",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\",\n  \"category\": \"books\",\n  \"tags\": [\"programming\", \"design-patterns\", \"software-engineering\", \"oop\"],\n  \"price\": 59.99\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/design-patterns-book",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"design-patterns-book"
+							]
+						},
+						"description": "Ejemplo de libro técnico con tags específicos."
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Oferta con TTL",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Oferta Especial - 70% OFF\",\n  \"category\": \"promotions\",\n  \"tags\": [\"offer\", \"discount\", \"flash-sale\", \"limited\"],\n  \"price\": 15.00\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/flash-offer-70?ttlSeconds=300",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"flash-offer-70"
+							],
+							"query": [
+								{
+									"key": "ttlSeconds",
+									"value": "300",
+									"description": "Expira en 5 minutos"
+								}
+							]
+						},
+						"description": "Ejemplo de oferta flash que expira en 5 minutos."
+					},
+					"response": []
+				}
+			],
+			"description": "Ejemplos de productos para poblar la base de datos y probar las funcionalidades."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script de pre-request para logging",
+					"console.log('Ejecutando request: ' + pm.request.name);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script de test para validar respuestas",
+					"pm.test('Status code is 200', function () {",
+					"    pm.response.to.have.status(200);",
+					"});",
+					"",
+					"pm.test('Response time is less than 2000ms', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});",
+					"",
+					"// Log de la respuesta para debugging",
+					"console.log('Response:', pm.response.text());"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string",
+			"description": "URL base de la API"
+		},
+		{
+			"key": "product_id",
+			"value": "laptop-001",
+			"type": "string",
+			"description": "ID de ejemplo para productos"
+		},
+		{
+			"key": "category_example",
+			"value": "electronics",
+			"type": "string",
+			"description": "Categoría de ejemplo"
+		}
+	]
+}
