@@ -4,17 +4,16 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "products")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product implements Serializable  {
 	private static final long serialVersionUID = 1L;
 
@@ -33,11 +32,6 @@ public class Product implements Serializable  {
     @Column
     private String category;
     
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "product_tags", joinColumns = @JoinColumn(name = "product_id"))
-    @Column(name = "tag")
-    private List<String> tags;
-    
     @NotNull @Positive
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
@@ -50,11 +44,10 @@ public class Product implements Serializable  {
 
     public Product() {}
 
-    public Product(String productId, String name, String category, List<String> tags, BigDecimal price) {
+    public Product(String productId, String name, String category, BigDecimal price) {
         this.productId = productId;
         this.name = name;
         this.category = category;
-        this.tags = tags;
         this.price = price;
         this.updatedAt = Instant.now();
         this.viewCount = 0L;
@@ -71,9 +64,6 @@ public class Product implements Serializable  {
     
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
-    
-    public List<String> getTags() { return tags; }
-    public void setTags(List<String> tags) { this.tags = tags; }
     
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) { this.price = price; }
