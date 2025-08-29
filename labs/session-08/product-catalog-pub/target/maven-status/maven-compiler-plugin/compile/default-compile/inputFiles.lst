@@ -1,0 +1,16 @@
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/controller/ProductController.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/repository/ProductRepository.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/notification/NotificationConsumer.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/notification/ProductNotification.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/service/ProductService.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/config/AdvancedCacheConfiguration.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/notification/NotificationService.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/service/ProductServiceImpl.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/exception/GlobalExceptionHandler.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/config/StringRedisSerializer.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/model/Product.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/exception/ProductNotFoundException.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/CatalogApplication.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/notification/NotificationPublisher.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/exception/ProductAlreadyExistsException.java
+/Users/davidbolet/development/PostgreSQL_course/labs/session-08/product-catalog-pub/src/main/java/com/session7/catalog/config/HttpMessageConverterConfiguration.java

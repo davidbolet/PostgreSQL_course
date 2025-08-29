@@ -1,0 +1,16 @@
+com/session7/catalog/exception/GlobalExceptionHandler.class
+com/session7/catalog/notification/NotificationPublisher.class
+com/session7/catalog/exception/ProductAlreadyExistsException.class
+com/session7/catalog/exception/ProductNotFoundException.class
+com/session7/catalog/controller/ProductController.class
+com/session7/catalog/model/Product.class
+com/session7/catalog/notification/NotificationService.class
+com/session7/catalog/config/HttpMessageConverterConfiguration.class
+com/session7/catalog/notification/NotificationConsumer.class
+com/session7/catalog/notification/ProductNotification.class
+com/session7/catalog/repository/ProductRepository.class
+com/session7/catalog/CatalogApplication.class
+com/session7/catalog/service/ProductServiceImpl.class
+com/session7/catalog/config/StringRedisSerializer.class
+com/session7/catalog/service/ProductService.class
+com/session7/catalog/config/AdvancedCacheConfiguration.class
